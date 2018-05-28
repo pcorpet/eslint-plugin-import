@@ -5,6 +5,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [Unreleased]
 - Add [`no-relative-parent-imports`] rule: disallow relative imports from parent directories.
+- Add `query-string` option to [`no-duplicates`] rule: allow duplicate imports with different query strings ([#1107], thanks [@pcorpet]).
 
 ## [2.12.0] - 2018-05-17
 ### Added

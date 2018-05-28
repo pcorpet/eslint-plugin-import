@@ -21,6 +21,13 @@ ruleTester.run('no-duplicates', rule, {
       code: "import { x } from './foo'; import type { y } from './foo'",
       parser: 'babel-eslint',
     }),
+
+    // #1107: Using different query strings that trigger different webpack loaders.
+    test({
+      code: "import x from './bar?optionX'; import y from './bar?optionY';",
+      options: [{'considerQueryString': true}],
+      settings: { 'import/resolver': 'webpack' },
+     }),
   ],
   invalid: [
     test({
@@ -40,6 +47,26 @@ ruleTester.run('no-duplicates', rule, {
         paths: [path.join( process.cwd()
                          , 'tests', 'files'
                          )] }},
+      errors: 2, // path ends up hardcoded
+     }),
+
+    // #1107: Using different query strings that trigger different webpack loaders.
+    test({
+      code: "import x from './bar.js?optionX'; import y from './bar?optionX';",
+      settings: { 'import/resolver': 'webpack' },
+      errors: 2, // path ends up hardcoded
+     }),
+    test({
+      code: "import x from './bar?optionX'; import y from './bar?optionY';",
+      settings: { 'import/resolver': 'webpack' },
+      errors: 2, // path ends up hardcoded
+     }),
+
+    // #1107: Using same query strings that trigger the same loader.
+    test({
+      code: "import x from './bar?optionX'; import y from './bar.js?optionX';",
+      options: [{'considerQueryString': true}],
+      settings: { 'import/resolver': 'webpack' },
       errors: 2, // path ends up hardcoded
      }),
 
